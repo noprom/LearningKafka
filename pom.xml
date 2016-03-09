@@ -21,59 +21,59 @@
 </properties>
 
 <dependencies>
-    <dependency>
-        <groupId>org.lafros</groupId>
-        <artifactId>scala-checking_2.9.2</artifactId>
-        <version>1.0</version>
-    </dependency>
+    <!--<dependency>-->
+        <!--<groupId>org.lafros</groupId>-->
+        <!--<artifactId>scala-checking_2.9.2</artifactId>-->
+        <!--<version>1.0</version>-->
+    <!--</dependency>-->
     <!-- Spark Start -->
-    <dependency>
-        <groupId>org.apache.spark</groupId>
-        <artifactId>spark-core_2.10</artifactId>
-        <version>${spark.version}</version>
-    </dependency>
-    <dependency>
-        <groupId>org.apache.spark</groupId>
-        <artifactId>spark-sql_2.10</artifactId>
-        <version>${spark.version}</version>
-    </dependency>
-    <dependency>
-        <groupId>org.apache.spark</groupId>
-        <artifactId>spark-streaming_2.10</artifactId>
-        <scope>provided</scope>
-        <version>${spark.version}</version>
-    </dependency>
-    <dependency>
-        <groupId>org.apache.spark</groupId>
-        <artifactId>spark-streaming-flume_2.10</artifactId>
-        <version>${spark.version}</version>
-    </dependency>
-    <dependency>
-        <groupId>org.apache.spark</groupId>
-        <artifactId>spark-graphx_2.10</artifactId>
-        <version>${spark.version}</version>
-    </dependency>
-    <dependency>
-        <groupId>org.apache.spark</groupId>
-        <artifactId>spark-streaming-kafka_2.10</artifactId>
-        <version>${spark.version}</version>
-    </dependency>
-    <dependency>
-        <groupId>com.datastax.cassandra</groupId>
-        <artifactId>cassandra-driver-core</artifactId>
-        <scope>provided</scope>
-        <version>3.0.0</version>
-    </dependency>
-    <dependency>
-        <groupId>com.datastax.spark</groupId>
-        <artifactId>spark-cassandra-connector_2.10</artifactId>
-        <version>1.5.0</version>
-    </dependency>
-    <dependency>
-        <groupId>com.datastax.spark</groupId>
-        <artifactId>spark-cassandra-connector-java_2.10</artifactId>
-        <version>1.5.0</version>
-    </dependency>
+    <!--<dependency>-->
+        <!--<groupId>org.apache.spark</groupId>-->
+        <!--<artifactId>spark-core_2.10</artifactId>-->
+        <!--<version>${spark.version}</version>-->
+    <!--</dependency>-->
+    <!--<dependency>-->
+        <!--<groupId>org.apache.spark</groupId>-->
+        <!--<artifactId>spark-sql_2.10</artifactId>-->
+        <!--<version>${spark.version}</version>-->
+    <!--</dependency>-->
+    <!--<dependency>-->
+        <!--<groupId>org.apache.spark</groupId>-->
+        <!--<artifactId>spark-streaming_2.10</artifactId>-->
+        <!--<scope>provided</scope>-->
+        <!--<version>${spark.version}</version>-->
+    <!--</dependency>-->
+    <!--<dependency>-->
+        <!--<groupId>org.apache.spark</groupId>-->
+        <!--<artifactId>spark-streaming-flume_2.10</artifactId>-->
+        <!--<version>${spark.version}</version>-->
+    <!--</dependency>-->
+    <!--<dependency>-->
+        <!--<groupId>org.apache.spark</groupId>-->
+        <!--<artifactId>spark-graphx_2.10</artifactId>-->
+        <!--<version>${spark.version}</version>-->
+    <!--</dependency>-->
+    <!--<dependency>-->
+        <!--<groupId>org.apache.spark</groupId>-->
+        <!--<artifactId>spark-streaming-kafka_2.10</artifactId>-->
+        <!--<version>${spark.version}</version>-->
+    <!--</dependency>-->
+    <!--<dependency>-->
+        <!--<groupId>com.datastax.cassandra</groupId>-->
+        <!--<artifactId>cassandra-driver-core</artifactId>-->
+        <!--<scope>provided</scope>-->
+        <!--<version>3.0.0</version>-->
+    <!--</dependency>-->
+    <!--<dependency>-->
+        <!--<groupId>com.datastax.spark</groupId>-->
+        <!--<artifactId>spark-cassandra-connector_2.10</artifactId>-->
+        <!--<version>1.5.0</version>-->
+    <!--</dependency>-->
+    <!--<dependency>-->
+        <!--<groupId>com.datastax.spark</groupId>-->
+        <!--<artifactId>spark-cassandra-connector-java_2.10</artifactId>-->
+        <!--<version>1.5.0</version>-->
+    <!--</dependency>-->
     <!-- Spark End -->
     <!-- Kafka Start -->
     <dependency>
@@ -81,12 +81,27 @@
         <artifactId>kafka-clients</artifactId>
         <version>${kafka.version}</version>
     </dependency>
-    <!-- Kafka End -->
     <dependency>
-        <groupId>com.googlecode.json-simple</groupId>
-        <artifactId>json-simple</artifactId>
-        <version>1.1.1</version>
+        <groupId>org.apache.kafka</groupId>
+        <artifactId>kafka_2.10</artifactId>
+        <version>${kafka.version}</version>
     </dependency>
+    <dependency>
+        <groupId>org.apache.kafka</groupId>
+        <artifactId>connect-api</artifactId>
+        <version>${kafka.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.kafka</groupId>
+        <artifactId>kafka-log4j-appender</artifactId>
+        <version>${kafka.version}</version>
+    </dependency>
+    <!-- Kafka End -->
+    <!--<dependency>-->
+    <!--<groupId>com.googlecode.json-simple</groupId>-->
+    <!--<artifactId>json-simple</artifactId>-->
+    <!--<version>1.1.1</version>-->
+    <!--</dependency>-->
 </dependencies>
 
 <build>
