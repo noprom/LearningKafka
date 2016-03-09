@@ -2,11 +2,216 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-
-    <groupId>com.huntdreams</groupId>
-    <artifactId>kafka</artifactId>
-    <version>1.0-SNAPSHOT</version>
+<modelVersion>4.0.0</modelVersion>
 
 
+<groupId>com.huntdreams</groupId>
+<artifactId>kafka</artifactId>
+<version>1.0-SNAPSHOT</version>
+<properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <hadoop.version>2.6.0</hadoop.version>
+    <java.version>1.7</java.version>
+    <maven.version.min>3.0.5</maven.version.min>
+    <scala.minor.version>2.10</scala.minor.version>
+    <scala.complete.version>${scala.minor.version}.4</scala.complete.version>
+    <spark.version>1.6.0</spark.version>
+    <kafka.version>0.9.0.0</kafka.version>
+</properties>
+
+<dependencies>
+    <dependency>
+        <groupId>org.lafros</groupId>
+        <artifactId>scala-checking_2.9.2</artifactId>
+        <version>1.0</version>
+    </dependency>
+    <!-- Spark Start -->
+    <dependency>
+        <groupId>org.apache.spark</groupId>
+        <artifactId>spark-core_2.10</artifactId>
+        <version>${spark.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.spark</groupId>
+        <artifactId>spark-sql_2.10</artifactId>
+        <version>${spark.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.spark</groupId>
+        <artifactId>spark-streaming_2.10</artifactId>
+        <scope>provided</scope>
+        <version>${spark.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.spark</groupId>
+        <artifactId>spark-streaming-flume_2.10</artifactId>
+        <version>${spark.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.spark</groupId>
+        <artifactId>spark-graphx_2.10</artifactId>
+        <version>${spark.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.spark</groupId>
+        <artifactId>spark-streaming-kafka_2.10</artifactId>
+        <version>${spark.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>com.datastax.cassandra</groupId>
+        <artifactId>cassandra-driver-core</artifactId>
+        <scope>provided</scope>
+        <version>3.0.0</version>
+    </dependency>
+    <dependency>
+        <groupId>com.datastax.spark</groupId>
+        <artifactId>spark-cassandra-connector_2.10</artifactId>
+        <version>1.5.0</version>
+    </dependency>
+    <dependency>
+        <groupId>com.datastax.spark</groupId>
+        <artifactId>spark-cassandra-connector-java_2.10</artifactId>
+        <version>1.5.0</version>
+    </dependency>
+    <!-- Spark End -->
+    <!-- Kafka Start -->
+    <dependency>
+        <groupId>org.apache.kafka</groupId>
+        <artifactId>kafka-clients</artifactId>
+        <version>${kafka.version}</version>
+    </dependency>
+    <!-- Kafka End -->
+    <dependency>
+        <groupId>com.googlecode.json-simple</groupId>
+        <artifactId>json-simple</artifactId>
+        <version>1.1.1</version>
+    </dependency>
+</dependencies>
+
+<build>
+    <sourceDirectory>${basedir}/src/main/scala</sourceDirectory>
+    <testSourceDirectory>${basedir}/src/test/scala</testSourceDirectory>
+    <resources>
+        <resource>
+            <directory>${basedir}/src/main/resources</directory>
+        </resource>
+    </resources>
+    <testResources>
+        <testResource>
+            <directory>${basedir}/src/test/resources</directory>
+        </testResource>
+    </testResources>
+    <plugins>
+        <plugin>
+            <groupId>net.alchim31.maven</groupId>
+            <artifactId>scala-maven-plugin</artifactId>
+            <version>3.2.0</version>
+            <executions>
+                <execution>
+                    <id>scala-compile</id>
+                    <goals>
+                        <goal>compile</goal>
+                    </goals>
+                </execution>
+                <execution>
+                    <id>scala-test-compile</id>
+                    <goals>
+                        <goal>testCompile</goal>
+                    </goals>
+                </execution>
+            </executions>
+            <configuration>
+                <recompileMode>incremental</recompileMode>
+                <args>
+                    <arg>-target:jvm-1.7</arg>
+                    <arg>-encoding</arg>
+                    <arg>UTF-8</arg>
+                </args>
+                <javacArgs>
+                    <javacArg>-source</javacArg>
+                    <javacArg>1.7</javacArg>
+                    <javacArg>-target</javacArg>
+                    <javacArg>1.7</javacArg>
+                </javacArgs>
+            </configuration>
+        </plugin>
+        <plugin>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <executions>
+                <execution>
+                    <id>default-compile</id>
+                    <phase>none</phase>
+                </execution>
+                <execution>
+                    <id>default-testCompile</id>
+                    <phase>none</phase>
+                </execution>
+            </executions>
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-shade-plugin</artifactId>
+            <version>2.2</version>
+            <configuration>
+                <createDependencyReducedPom>true</createDependencyReducedPom>
+            </configuration>
+            <executions>
+                <execution>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>shade</goal>
+                    </goals>
+                    <configuration>
+                        <artifactSet>
+                            <includes>
+                                <include>*:*</include>
+                            </includes>
+                        </artifactSet>
+                        <filters>
+                            <filter>
+                                <artifact>*:*</artifact>
+                                <excludes>
+                                    <exclude>META-INF/*.SF</exclude>
+                                    <exclude>META-INF/*.DSA</exclude>
+                                    <exclude>META-INF/*.RSA</exclude>
+                                </excludes>
+                            </filter>
+                        </filters>
+                        <transformers>
+                            <transformer
+                                    implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                            <transformer
+                                    implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                <resource>reference.conf</resource>
+                            </transformer>
+                            <transformer
+                                    implementation="org.apache.maven.plugins.shade.resource.DontIncludeResourceTransformer">
+                                <resource>log4j.properties</resource>
+                            </transformer>
+                        </transformers>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <version>2.2-beta-5</version>
+            <configuration>
+                <descriptorRefs>
+                    <descriptorRef>jar-with-dependencies</descriptorRef>
+                </descriptorRefs>
+            </configuration>
+            <executions>
+                <execution>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>single</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+</build>
 </project>
