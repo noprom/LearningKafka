@@ -1,3 +1,5 @@
+# Kafka 配置
+
 ## 开启zookeeper
 
 ```
@@ -48,6 +50,8 @@ bin/kafka-console-producer.sh --broker-list localhost:9092, localhost:9093 --top
 bin/kafka-console-consumer.sh --zookeeper localhost:2181 --topic kafkatopic --from-beginning
 bin/kafka-console-consumer.sh --zookeeper localhost:2181 --topic replicated-kafkatopic --from-beginning
 ```
+
+# Spark 配置
 
 ## 提交job
 ```
