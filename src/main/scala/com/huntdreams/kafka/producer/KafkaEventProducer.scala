@@ -42,6 +42,15 @@ object KafkaEventProducer {
     random.nextInt(10)
   }
 
+//  bin/zookeeper-server-start.sh config/zookeeper.properties
+//  bin/kafka-server-start.sh config/server.properties
+//  bin/kafka-server-start.sh config/server-1.properties
+//  bin/kafka-server-start.sh config/server-2.properties
+//
+//  bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 2 --partitions 2 --topic user_events
+//  bin/kafka-topics.sh --list --zookeeper localhost:2181 user_events
+//  bin/kafka-console-consumer.sh --zookeeper localhost:2181 --topic user_events --from-beginning
+
   // bin/kafka-topics.sh --zookeeper zk1:2181,zk2:2181,zk3:2181/kafka --create --topic user_events --replication-factor 2 --partitions 2
   // bin/kafka-topics.sh --zookeeper zk1:2181,zk2:2181,zk3:2181/kafka --list
   // bin/kafka-topics.sh --zookeeper zk1:2181,zk2:2181,zk3:2181/kafka --describe user_events
