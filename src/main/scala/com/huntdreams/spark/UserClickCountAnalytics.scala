@@ -49,6 +49,9 @@ object UserClickCountAnalytics {
         partitionOfRecords.foreach(pair => {
           val uid = pair._1
           val clickCount = pair._2
+
+          println("------ " + uid + ":" + clickCount)
+          // 将结果保存到redis
           val jedis = RedisClient.pool.getResource
           jedis.select(dbIndex)
           jedis.hincrBy(clickHashKey, uid, clickCount)

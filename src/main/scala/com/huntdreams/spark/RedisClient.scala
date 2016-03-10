@@ -10,8 +10,8 @@ import redis.clients.jedis.JedisPool
   * Date: 16/3/10 下午9:20.
   */
 object RedisClient extends Serializable {
-//  val redisHost = "10.10.4.130"
-  val redisHost = "localhost"
+  val redisHost = "127.0.0.1"
+//  val redisHost = "localhost"
   val redisPort = 6379
   val redisTimeout = 30000
   lazy val pool = new JedisPool(new GenericObjectPoolConfig(), redisHost, redisPort, redisTimeout)
