@@ -14,6 +14,7 @@ import org.codehaus.jettison.json.JSONObject
   * Date: 16/3/10 下午9:12.
   */
 object UserClickCountAnalytics {
+
   def main(args: Array[String]): Unit = {
     var masterUrl = "local[1]"
     if (args.length > 0) {

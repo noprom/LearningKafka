@@ -14,6 +14,7 @@ object RedisClient extends Serializable {
   val redisPort = 6379
   val redisTimeout = 30000
   lazy val pool = new JedisPool(new GenericObjectPoolConfig(), redisHost, redisPort, redisTimeout)
+
   lazy val hook = new Thread {
     override def run = {
       println("Execute hook thread: " + this)
