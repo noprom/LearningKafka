@@ -19,8 +19,8 @@ public class SimpleProducer {
     public SimpleProducer() {
         Properties props = new Properties();
         // Set the broker list for requesting metadata to find the lead broker
-        props.put("metadata.broker.list", "192.168.146.132:9092, 192.168.146.132:9093, " +
-                "192.168 .146 .132:9094 ");
+        props.put("metadata.broker.list", "localhost:9092, localhost:9093, " +
+                "localhost:9094");
         // This specifies the serializer class for keys
         props.put("serializer.class", "kafka.serializer.StringEncoder");
         // 1 means the producer receives an acknowledgment once the lead replica
@@ -33,13 +33,17 @@ public class SimpleProducer {
 
     public static void main(String[] args) {
         int argsCount = args.length;
-        if (argsCount == 0 || argsCount == 1)
-            throw new IllegalArgumentException(
-                    "Please provide topic name and Message count as arguments");
+//        if (argsCount == 0 || argsCount == 1)
+//            throw new IllegalArgumentException(
+//                    "Please provide topic name and Message count as arguments");
         // Topic name and the message count to be published is passed from the
         // command line
-        String topic = (String) args[0];
-        String count = (String) args[1];
+        String topic =
+//                "kafkatopic";
+                (String) args[0];
+        String count =
+//                "100000";
+                (String) args[1];
         int messageCount = Integer.parseInt(count);
         System.out.println("Topic Name - " + topic);
         System.out.println("Message Count - " + messageCount);
