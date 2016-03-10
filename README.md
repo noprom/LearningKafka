@@ -49,3 +49,12 @@ bin/kafka-console-consumer.sh --zookeeper localhost:2181 --topic kafkatopic --fr
 bin/kafka-console-consumer.sh --zookeeper localhost:2181 --topic replicated-kafkatopic --from-beginning
 ```
 
+## 提交job
+```
+cd /usr/local/spark
+./bin/spark-submit --class com.huntdreams.spark.UserClickCountAnalytics \
+    --master spark://nopromdeMacBook-Pro.local:7077 \
+    --executor-memory 1G --total-executor-cores 2 \
+    --packages "org.apache.spark:spark-streaming-kafka_2.10:1.6.0,redis.clients:jedis:2.8.0" \
+    /Users/noprom/Documents/Dev/Kafka/Pro/LearningKafka/out/artifacts/UserClickCountAnalytics_jar/LearningKafka.jar
+```
