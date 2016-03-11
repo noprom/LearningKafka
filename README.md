@@ -62,3 +62,26 @@ cd /usr/local/spark
     --packages "org.apache.spark:spark-streaming-kafka_2.10:1.6.0,redis.clients:jedis:2.8.0" \
     /Users/noprom/Documents/Dev/Kafka/Pro/LearningKafka/out/artifacts/UserClickCountAnalytics_jar/LearningKafka.jar
 ```
+
+# Kafka 和 Spark Streaming 整合
+```
+# 启动kafka
+bin/zookeeper-server-start.sh config/zookeeper.properties
+bin/kafka-server-start.sh config/server.properties
+bin/kafka-server-start.sh config/server-1.properties
+bin/kafka-server-start.sh config/server-2.properties
+
+# 创建App统计的topic
+bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 2 --partitions 2 --topic user_events
+bin/kafka-topics.sh --list --zookeeper localhost:2181 user_events
+
+# 消费数据
+bin/kafka-console-consumer.sh --zookeeper localhost:2181 --topic user_events --from-beginning
+
+# 提交spark job
+./bin/spark-submit --class com.huntdreams.spark.UserClickCountAnalytics \
+    --master spark://nopromdeMacBook-Pro.local:7077 \
+    --executor-memory 1G --total-executor-cores 2 \
+    --packages "org.apache.spark:spark-streaming-kafka_2.10:1.6.0,redis.clients:jedis:2.8.0" \
+    /Users/noprom/Documents/Dev/Kafka/Pro/LearningKafka/out/artifacts/UserClickCountAnalytics_jar/LearningKafka.jar
+```
