@@ -1,12 +1,19 @@
-# Flume 日志模拟
+# Flume相关配置
+
+## Flume 日志模拟
 ```
 java -jar LogGenerator.jar /Users/noprom/Documents/Dev/Spark/servers/node-1/appserver-2/logs/debug.log  /Users/noprom/Documents/Dev/Spark/servers/node-1/appserver-1/logs/debug.log
 ```
 
-# Flume 采集日志
+## 开启一个Flume agent
 ```
 ./bin/flume-ng agent --conf conf --conf-file conf/spark-flume.conf --name a1
 ```
+
+# Flume 与 Kafka 对接
+
+##  
+
 # Kafka 配置
 
 ## 开启zookeeper
