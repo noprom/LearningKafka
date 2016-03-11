@@ -7,12 +7,12 @@ java -jar LogGenerator.jar /Users/noprom/Documents/Dev/Spark/servers/node-1/apps
 
 ## 开启一个Flume agent
 ```
+# spark flume
 ./bin/flume-ng agent --conf conf --conf-file conf/spark-flume.conf --name a1
+# kafka flume
+./bin/flume-ng agent --conf conf --conf-file conf/kafka.conf -name agentkafka -Dflume.root.logger=INFO,console
 ```
-
-# Flume 与 Kafka 对接
-
-##  
+  
 
 # Kafka 配置
 
