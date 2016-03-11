@@ -7,12 +7,13 @@ java -jar LogGenerator.jar /Users/noprom/Documents/Dev/Spark/servers/node-1/apps
 
 ## 开启一个Flume agent
 ```
+# 复制自定义sink到flume/lib目录下面
+cp out/artifacts/KafkaSink_jar/KafkaSink.jar /Users/noprom/Documents/Dev/Spark/Res/apache-flume-1.6.0-bin/lib
 # spark flume
 ./bin/flume-ng agent --conf conf --conf-file conf/spark-flume.conf --name a1
-# kafka flume
+# kafka log flume
 ./bin/flume-ng agent --conf conf --conf-file conf/kafka.conf -name agentkafka -Dflume.root.logger=INFO,console
 ```
-  
 
 # Kafka 配置
 
@@ -35,7 +36,7 @@ bin/kafka-server-start.sh config/server-2.properties
 ## 创建topic
 ```
 # 1.单个replica
-bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic kafkatopic
+bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 2 --partitions 2 --topic log-topic
 # 2.多个replica
 bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 3 --partitions 1 --topic replicated-kafkatopic
 
@@ -95,9 +96,9 @@ bin/kafka-topics.sh --list --zookeeper localhost:2181 user_events
 bin/kafka-console-consumer.sh --zookeeper localhost:2181 --topic user_events --from-beginning
 
 # 提交spark job
-./bin/spark-submit --class com.huntdreams.module.userevent.spark.UserClickCountAnalytics \
+./bin/spark-submit --class cn.kingsgame.spark.LogAnalyser \
     --master spark://nopromdeMacBook-Pro.local:7077 \
     --executor-memory 1G --total-executor-cores 2 \
     --packages "org.apache.spark:spark-streaming-kafka_2.10:1.6.0,redis.clients:jedis:2.8.0" \
-    /Users/noprom/Documents/Dev/Kafka/Pro/LearningKafka/out/artifacts/UserClickCountAnalytics__jar/UserClickCountAnalytics.jar
+    /Users/noprom/Documents/Dev/Kafka/Pro/LearningKafka/out/artifacts/LogAnalyser_jar/LogAnalyser.jar
 ```

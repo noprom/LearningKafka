@@ -14,6 +14,7 @@ import java.util.Properties;
 /**
  * KafkaSink
  * 自定义kafka sink,连接kafka所用
+ * Kafka Topic: log-topic
  * <p/>
  * Author: Noprom <tyee.noprom@qq.com>
  * Date: 16/3/11 下午9:16.
@@ -25,7 +26,7 @@ public class KafkaSink extends AbstractSink implements Configurable {
     private Producer<String, String> producer;
 
     public void configure(Context context) {
-        topic = "kafkatopic";
+        topic = "log-topic";
         Properties props = new Properties();
         props.setProperty("metadata.broker.list", "localhost:9092, localhost:9093, localhost:9094");
         props.setProperty("serializer.class", "kafka.serializer.StringEncoder");
