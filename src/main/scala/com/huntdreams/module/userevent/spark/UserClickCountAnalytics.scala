@@ -1,4 +1,4 @@
-package com.huntdreams.spark
+package com.huntdreams.module.userevent.spark
 
 import kafka.serializer.StringDecoder
 import org.apache.spark.SparkConf
@@ -43,7 +43,9 @@ object UserClickCountAnalytics {
 
     // Compute user click times
     val userClicks = events.map(x => (
-      x.getString("uid"), x.getInt("click_count"))).reduceByKey(_ + _)
+      x.getString("uid"), x.getInt("click_count"))
+    ).reduceByKey(_ + _)
+
     userClicks.foreachRDD(rdd => {
       rdd.foreachPartition(partitionOfRecords => {
         partitionOfRecords.foreach(pair => {

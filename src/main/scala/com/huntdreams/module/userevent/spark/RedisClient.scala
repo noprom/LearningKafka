@@ -1,4 +1,4 @@
-package com.huntdreams.spark
+package com.huntdreams.module.userevent.spark
 
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig
 import redis.clients.jedis.JedisPool
