@@ -95,9 +95,9 @@ bin/kafka-topics.sh --list --zookeeper localhost:2181 user_events
 bin/kafka-console-consumer.sh --zookeeper localhost:2181 --topic user_events --from-beginning
 
 # 提交spark job
-./bin/spark-submit --class com.huntdreams.spark.UserClickCountAnalytics \
+./bin/spark-submit --class com.huntdreams.module.userevent.spark.UserClickCountAnalytics \
     --master spark://nopromdeMacBook-Pro.local:7077 \
     --executor-memory 1G --total-executor-cores 2 \
     --packages "org.apache.spark:spark-streaming-kafka_2.10:1.6.0,redis.clients:jedis:2.8.0" \
-    /Users/noprom/Documents/Dev/Kafka/Pro/LearningKafka/out/artifacts/UserClickCountAnalytics_jar/LearningKafka.jar
+    /Users/noprom/Documents/Dev/Kafka/Pro/LearningKafka/out/artifacts/UserClickCountAnalytics__jar/UserClickCountAnalytics.jar
 ```

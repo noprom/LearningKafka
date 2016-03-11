@@ -26,7 +26,8 @@ object UserClickCountAnalytics {
     val ssc = new StreamingContext(conf, Seconds(5))
 
     // Kafka configurations
-    val topics = Set("user_events")
+    // val topics = Set("user_events")
+    val topics = Set("kafkatopic")
     val brokers = "localhost:9092, localhost:9093, localhost:9094"
     val kafkaParams = Map[String, String](
       "metadata.broker.list" -> brokers, "serializer.class" -> "kafka.serializer.StringEncoder")
@@ -36,31 +37,40 @@ object UserClickCountAnalytics {
     // Create a direct stream
     val kafkaStream = KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](ssc, kafkaParams, topics)
 
-    val events = kafkaStream.flatMap(line => {
-      val data = new JSONObject(line._2)
-      Some(data)
-    })
+    // 处理log日志
+    val logRequest = kafkaStream.flatMap(line => {
+        Some(line._2)
+      }
+    )
 
-    // Compute user click times
-    val userClicks = events.map(x => (
-      x.getString("uid"), x.getInt("click_count"))
-    ).reduceByKey(_ + _)
+    logRequest.print()
 
-    userClicks.foreachRDD(rdd => {
-      rdd.foreachPartition(partitionOfRecords => {
-        partitionOfRecords.foreach(pair => {
-          val uid = pair._1
-          val clickCount = pair._2
+//    val events = kafkaStream.flatMap(line => {
+//      val data = new JSONObject(line._2)
+//      Some(data)
+//    })
+//
+//    // Compute user click times
+//    val userClicks = events.map(x => (
+//      x.getString("uid"), x.getInt("click_count"))
+//    ).reduceByKey(_ + _)
+//
+//    userClicks.foreachRDD(rdd => {
+//      rdd.foreachPartition(partitionOfRecords => {
+//        partitionOfRecords.foreach(pair => {
+//          val uid = pair._1
+//          val clickCount = pair._2
+//
+//          println("------ " + uid + ":" + clickCount)
+//          // 将结果保存到redis
+//          val jedis = RedisClient.pool.getResource
+//          jedis.select(dbIndex)
+//          jedis.hincrBy(clickHashKey, uid, clickCount)
+//          RedisClient.pool.returnResource(jedis)
+//        })
+//      })
+//    })
 
-          println("------ " + uid + ":" + clickCount)
-          // 将结果保存到redis
-          val jedis = RedisClient.pool.getResource
-          jedis.select(dbIndex)
-          jedis.hincrBy(clickHashKey, uid, clickCount)
-          RedisClient.pool.returnResource(jedis)
-        })
-      })
-    })
     ssc.start()
     ssc.awaitTermination()
   }
