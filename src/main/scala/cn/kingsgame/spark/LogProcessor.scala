@@ -2,6 +2,7 @@ package cn.kingsgame.spark
 
 import java.util.regex.{Matcher, Pattern}
 
+import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkContext, SparkConf}
 
 /**
@@ -25,12 +26,11 @@ object LogProcessor {
   def transformLogData(logLine: String): Map[String, String] = {
     val line = logLine.replaceAll("\\\\x22", "")
     // 正则表达式提取日志字段
-
     val LOG_ENTRY_PATTERN =
       """^(\S+) (\S+) (\S+) \[([\w:/]+\s[+\-]\d{4})\] "(\S+)" "(\S+) (\S+) (\S+)" "-" (\d{3}) (\d+) (.+) "(.+)" "(\S+)" "(\S+)" "(\S+)" "(\S+)" "(\S+)""""
 
     val PATTERN = Pattern.compile(LOG_ENTRY_PATTERN)
-    val matcher = PATTERN.matcher(logLine)
+    val matcher = PATTERN.matcher(line)
     // 匹配
     if (!matcher.find()) {
       System.out.println("Cannot parse logline" + logLine)
@@ -52,7 +52,7 @@ object LogProcessor {
       ("user" -> m.group(3)),
       ("date" -> m.group(4)),
       ("domain" -> m.group(5)),
-      ("request" -> m.group(6)),
+      ("method" -> m.group(6)),
       ("protocol" -> m.group(7)),
       ("respCode" -> m.group(8)),
       ("size" -> m.group(9)),
@@ -85,26 +85,50 @@ object LogProcessor {
   }
 
   def main(args: Array[String]) {
-    //    val logFile = bathPath + "20160209.log"
-    //    val eventFile = bathPath + "20160301_13_hk12.event"
-    //
-    //    // Spark 相关配置
-    //    var masterUrl = "local[1]"
-    //    if (args.length > 0) {
-    //      masterUrl = args(0)
-    //    }
-    //
-    //    // 配置 SparkConf
-    //    val conf = new SparkConf().setAppName("LogProcessor").setMaster(masterUrl)
-    //    val sc = new SparkContext(conf)
-    //
-    //    // 开始处理Log日志
-    //    // val logProcessor = new LogProcessor()
-    //    val logs = sc.textFile(logFile)
-    //    logs.foreach(line => {
-    //      println(transformLogData(line))
-    //    })
+    val logFile = bathPath + "20160209.log"
+    val eventFile = bathPath + "20160301_13_hk12.event"
 
+    // Spark 相关配置
+    var masterUrl = "local[1]"
+    if (args.length > 0) {
+      masterUrl = args(0)
+    }
+
+    // 配置 SparkConf
+    val conf = new SparkConf().setAppName("LogProcessor").setMaster(masterUrl)
+    val sc = new SparkContext(conf)
+
+    // 开始处理Log日志
+    // val logProcessor = new LogProcessor()
+    val logs = sc.textFile(logFile)
+    val newLogs = logs.flatMap(line => transformLogData(line))
+
+    // 打印日志内容
+    // printLogVals(newLogs)
+
+    // 统计不同的ip1以及访问次数
+    val ip1 = newLogs.filter(x => x._1.equals("ip1")).map(x => (x._2, 1)).reduceByKey(_ + _).collect()
+    printLogCount(ip1)
+  }
+
+  /**
+    * 打印日志内容
+    *
+    * @param rdd
+    */
+  def printLogVals(rdd: RDD[(String, String)]) = {
+    val array = rdd.collect()
+    println("---------Start Printing Results----------")
+    for (dataMap <- array.array) {
+      println(dataMap._1, "----->", dataMap._2)
+    }
+    println("---------Finished Printing Results----------")
+  }
+
+  def printLogCount(rdd: Array[(String, Int)]) = {
+    for (map <- rdd) {
+      println(map)
+    }
   }
 }
 
