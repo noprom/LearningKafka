@@ -17,7 +17,6 @@ object LogProcessorApp {
   // 更目录
   private val bathPath = this.getClass.getResource("/").getPath
 
-  //
   /**
     * 转换日志数据
     *
