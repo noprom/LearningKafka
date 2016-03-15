@@ -40,9 +40,6 @@ object ApacheAccessLog {
     */
   def legalLogLine(log: String): Boolean = {
     val res = PATTERN.findFirstMatchIn(log)
-    if (res.isEmpty) {
-      false
-    }
-    true
+    !res.isEmpty
   }
 }
