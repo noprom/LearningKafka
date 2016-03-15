@@ -31,4 +31,18 @@ object ApacheAccessLog {
     ApacheAccessLog(m.group(1), m.group(2), m.group(3), m.group(4),
       m.group(5), m.group(6), m.group(7), m.group(8).toInt, m.group(9).toLong)
   }
+
+  /**
+    * 判断该条log是否合法
+    *
+    * @param log
+    * @return
+    */
+  def legalLogLine(log: String): Boolean = {
+    val res = PATTERN.findFirstMatchIn(log)
+    if (res.isEmpty) {
+      false
+    }
+    true
+  }
 }

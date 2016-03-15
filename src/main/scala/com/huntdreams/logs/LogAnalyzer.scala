@@ -37,7 +37,9 @@ object LogAnalyzer {
       logFile = bathPath + "apache.access.log"
     }
 
-    val accessLogs = sc.textFile(logFile).map(ApacheAccessLog.parseLogLine).cache()
+    // TODO 过滤非法请求
+    val accessLogs = sc.textFile(logFile).filter(x => ApacheAccessLog.legalLogLine(x)).
+      map(ApacheAccessLog.parseLogLine).cache()
 
     // Calculate statistics based on the content size.
     val contentSizes = accessLogs.map(log => log.contentSize).cache()
