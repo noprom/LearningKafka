@@ -24,6 +24,13 @@ import org.apache.spark.streaming.{StreamingContext, Duration}
   * --master local[4]
   * target/scala-2.10/spark-logs-analyzer_2.10-1.0.jar
   *
+  *
+   ./bin/spark-submit --class com.huntdreams.logs.LogAnalyzerStreaming \
+    --master spark://nopromdeMacBook-Pro.local:7077 \
+    --executor-memory 1G --total-executor-cores 2 \
+    --packages "org.apache.spark:spark-streaming-kafka_2.10:1.6.0,redis.clients:jedis:2.8.0" \
+    /Users/noprom/Documents/Dev/Kafka/Pro/LearningKafka/out/artifacts/LogAnalyzerStreaming_jar/LogAnalyzerStreaming.jar
+
   * Author: Noprom <tyee.noprom@qq.com>
   * Date: 16/3/15 下午5:02.
   */
