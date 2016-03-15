@@ -27,9 +27,9 @@ bin/zookeeper-server-start.sh config/zookeeper.properties
 ## 开启broker
 ```
 # 1.开启单个broker
-bin/kafka-server-start.sh config/server.properties
+bin/kafka-server-start.sh config/server.properties &
 # 2.开启多个broker
-bin/kafka-server-start.sh config/server-1.properties
+bin/kafka-server-start.sh config/server-1.properties &
 bin/kafka-server-start.sh config/server-2.properties
 ```
 

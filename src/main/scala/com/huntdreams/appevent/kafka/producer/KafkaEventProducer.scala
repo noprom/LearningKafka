@@ -1,4 +1,4 @@
-package com.huntdreams.module.userevent.kafka.producer
+package com.huntdreams.appevent.kafka.producer
 
 import java.util.Properties
 

@@ -2,8 +2,8 @@ package cn.kingsgame.spark
 
 import java.util.regex.{Matcher, Pattern}
 
-import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkContext, SparkConf}
+import org.apache.spark.rdd.RDD
 
 /**
   * LogProcessor
@@ -12,11 +12,12 @@ import org.apache.spark.{SparkContext, SparkConf}
   * Author: Noprom <tyee.noprom@qq.com>
   * Date: 16/3/11 下午10:24.
   */
-class LogProcessor {
+object LogProcessorApp {
 
   // 更目录
   private val bathPath = this.getClass.getResource("/").getPath
 
+  //
   /**
     * 转换日志数据
     *
@@ -84,7 +85,7 @@ class LogProcessor {
     println(res)
   }
 
-//  def main(args: Array[String]) {
+  def main(args: Array[String]) {
 //    val logFile = bathPath + "20160209.log"
 //    val eventFile = bathPath + "20160301_13_hk12.event"
 //
@@ -109,7 +110,8 @@ class LogProcessor {
 //    // 统计不同的ip1以及访问次数
 //    val ip1 = newLogs.filter(x => x._1.equals("ip1")).map(x => (x._2, 1)).reduceByKey(_ + _).collect()
 //    printLogCount(ip1)
-//  }
+    sampleLogProcess()
+  }
 
   /**
     * 打印日志内容

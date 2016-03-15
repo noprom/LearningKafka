@@ -1,10 +1,9 @@
-package com.huntdreams.module.userevent.spark
+package com.huntdreams.appevent.spark
 
 import kafka.serializer.StringDecoder
 import org.apache.spark.SparkConf
 import org.apache.spark.streaming.kafka.KafkaUtils
 import org.apache.spark.streaming.{Seconds, StreamingContext}
-import org.codehaus.jettison.json.JSONObject
 
 /**
   * UserClickCountAnalytics
