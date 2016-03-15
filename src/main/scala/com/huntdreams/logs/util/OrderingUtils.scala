@@ -20,5 +20,4 @@ object OrderingUtils {
       a._2 compare b._2
     }
   }
-
 }
