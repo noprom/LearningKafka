@@ -1,5 +1,6 @@
 package cn.kingsgame.analyser
 
+import cn.kingsgame.log.bean.{KingsGameAccessLog, KingsGameAccessLogProcessor}
 import kafka.serializer.StringDecoder
 import org.apache.spark.SparkConf
 import org.apache.spark.rdd.RDD
@@ -17,36 +18,80 @@ import org.apache.spark.streaming.{Seconds, StreamingContext}
   */
 object LogAnalyser {
 
+  /**
+    * 累加求和的transform
+    */
+  val computeRunningSum = (values: Seq[Long], state: Option[Long]) => {
+    val currentCount = values.foldLeft(0L)(_ + _)
+    val previousCount = state.getOrElse(0L)
+    Some(currentCount + previousCount)
+  }
+
   def main(args: Array[String]) {
     var masterUrl = "local[1]"
     if (args.length > 0) {
       masterUrl = args(0)
     }
 
-    // Create a StreamingContext with the given master URL
-    val conf = new SparkConf().setMaster(masterUrl).setAppName("LogAnalyser")
+    // 创建一个 StreamingContext
+    val conf = new SparkConf().setMaster(masterUrl).setAppName("KingsGameLogAnalyser")
     val ssc = new StreamingContext(conf, Seconds(5))
 
-    // Kafka configurations
+    // 使用 updateStateByKey 需要设置 Checkpoint
+    ssc.checkpoint("/tmp/kings-game-log-analyser-streaming-total-scala")
+
+    // 配置 Kafka
     val topics = Set("log-topic")
     val brokers = "localhost:9092, localhost:9093, localhost:9094"
     val kafkaParams = Map[String, String](
       "metadata.broker.list" -> brokers, "serializer.class" -> "kafka.serializer.StringEncoder")
 
-    // Create a direct stream
+    // 由 Kafka 创建一个 stream
     val kafkaStream = KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](ssc, kafkaParams, topics)
 
     // 处理log日志
-    val logProcessor = new LogProcessor()
-    val newLogsDstream = kafkaStream.flatMap(line => logProcessor.transformLogData(line._2))
+    val logProcessor = new KingsGameAccessLogProcessor()
+    val accessLogsDStream = kafkaStream.flatMap(line => {
+      Some(line._2)
+    }).map(logProcessor.parseLogLine).cache()
 
     // 处理流数据
-    executeTransformations(newLogsDstream, ssc)
+    execTransform(accessLogsDStream, ssc)
 
     // 开始流处理
     ssc.start()
     ssc.awaitTermination()
   }
+
+  /**
+    * 处理流数据
+    *
+    * @param accessLogsDStream
+    * @param ssc
+    */
+  def execTransform(accessLogsDStream: DStream[KingsGameAccessLog], ssc: StreamingContext): Unit = {
+    // 统计不同国家的用户量
+    val countryData = accessLogsDStream
+      .map(x => (x.device.country, 1L))
+      .reduceByKey(_ + _)
+
+    // 累计求和
+    val cumulativeCountryDataCountDStream = countryData
+      .updateStateByKey(computeRunningSum)
+    cumulativeCountryDataCountDStream.foreachRDD(rdd => {
+      val responseCodeToCount = rdd.take(100)
+      rdd.foreachPartition(partionOfRecords => {
+        partionOfRecords.foreach(pair => {
+          val country = pair._1
+          val count = pair._2
+          println("" + country + "\t" + count)
+          // TODO 保存到文件
+        })
+      })
+    })
+  }
+
+  //----------------------------------下面代码为测试代码-------------------------------------//
 
   /**
     * 执行所有转换
