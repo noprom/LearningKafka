@@ -60,7 +60,9 @@ class Device(slient: String, offerId: String, manuFacturer: String, resolution: 
              imsi: String, uuid: String, group: String, channel: String)
   extends Serializable
 {
-  var country = nation
+  var mCountry = nation
+  var mOS = os
+  var mResolution = resolution
 
   override def toString: String = {
     "slient: " + slient + "\n" + "offerId: " + offerId + "\n" + "manuFacturer: " + manuFacturer + "\n" +

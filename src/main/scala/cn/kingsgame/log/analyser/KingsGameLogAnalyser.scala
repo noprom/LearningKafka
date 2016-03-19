@@ -84,7 +84,7 @@ object KingsGameLogAnalyser {
   def execTransform(accessLogsDStream: DStream[KingsGameAccessLog], ssc: StreamingContext): Unit = {
     // 统计不同国家的用户量
     val countryData = accessLogsDStream
-      .map(x => (x.device.country, 1L))
+      .map(x => (x.device.mCountry, 1L))
       .reduceByKey(_ + _)
 
     // 累计求和
@@ -98,6 +98,46 @@ object KingsGameLogAnalyser {
           val country = pair._1
           val count = pair._2
           println("----->" + country + "\t" + count)
+        })
+      })
+    })
+
+    // 统计不同的手机版本
+    val osTypeData = accessLogsDStream
+      .map(x => (x.device.mOS, 1L))
+      .reduceByKey(_ + _)
+
+    // 累计求和
+    val cumulativeOSDataCountDStream = osTypeData
+      .updateStateByKey(computeRunningSum)
+    cumulativeOSDataCountDStream.foreachRDD(rdd => {
+      // 保存到文件
+      rdd.saveAsTextFile(baseSavePath + "/osTypeData.txt")
+      rdd.foreachPartition(partionOfRecords => {
+        partionOfRecords.foreach(pair => {
+          val os = pair._1
+          val count = pair._2
+          println("----->" + os + "\t" + count)
+        })
+      })
+    })
+
+    // 统计不同的手机分辨率
+    val resolutionData = accessLogsDStream
+      .map(x => (x.device.mResolution, 1L))
+      .reduceByKey(_ + _)
+
+    // 累计求和
+    val cumulativeResolutionDataCountDStream = resolutionData
+      .updateStateByKey(computeRunningSum)
+    cumulativeResolutionDataCountDStream.foreachRDD(rdd => {
+      // 保存到文件
+      rdd.saveAsTextFile(baseSavePath + "/resolutionData.txt")
+      rdd.foreachPartition(partionOfRecords => {
+        partionOfRecords.foreach(pair => {
+          val mResolution = pair._1
+          val count = pair._2
+          println("----->" + mResolution + "\t" + count)
         })
       })
     })

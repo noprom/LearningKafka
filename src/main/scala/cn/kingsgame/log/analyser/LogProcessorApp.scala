@@ -118,7 +118,7 @@ object LogProcessorApp {
 
     // 统计不同国家的用户量
     val countryData = accessLogs
-      .map(x => (x.device.country, 1))
+      .map(x => (x.device.mCountry, 1))
       .reduceByKey(_ + _)
       .take(100)
     println(s"""countryData -----> : ${countryData.mkString("[", ",", "]")}""")
