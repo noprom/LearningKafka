@@ -85,31 +85,31 @@ object LogProcessorApp {
   }
 
   def main(args: Array[String]) {
-//    val logFile = bathPath + "20160209.log"
-//    val eventFile = bathPath + "20160301_13_hk12.event"
-//
-//    // Spark 相关配置
-//    var masterUrl = "local[1]"
-//    if (args.length > 0) {
-//      masterUrl = args(0)
-//    }
-//
-//    // 配置 SparkConf
-//    val conf = new SparkConf().setAppName("LogProcessor").setMaster(masterUrl)
-//    val sc = new SparkContext(conf)
-//
-//    // 开始处理Log日志
-//    // val logProcessor = new LogProcessor()
-//    val logs = sc.textFile(logFile)
-//    val newLogs = logs.flatMap(line => transformLogData(line))
-//
-//    // 打印日志内容
-//    // printLogVals(newLogs)
-//
-//    // 统计不同的ip1以及访问次数
-//    val ip1 = newLogs.filter(x => x._1.equals("ip1")).map(x => (x._2, 1)).reduceByKey(_ + _).collect()
-//    printLogCount(ip1)
-    sampleLogProcess()
+    val logFile = bathPath + "20160209.log"
+    val eventFile = bathPath + "20160301_13_hk12.event"
+
+    // Spark 相关配置
+    var masterUrl = "local[1]"
+    if (args.length > 0) {
+      masterUrl = args(0)
+    }
+
+    // 配置 SparkConf
+    val conf = new SparkConf().setAppName("LogProcessor").setMaster(masterUrl)
+    val sc = new SparkContext(conf)
+
+    // 开始处理Log日志
+    // val logProcessor = new LogProcessor()
+    val logs = sc.textFile(logFile)
+    val newLogs = logs.flatMap(line => transformLogData(line))
+
+    // 打印日志内容
+    printLogVals(newLogs)
+
+    // 统计不同的ip1以及访问次数
+    //    val ip1 = newLogs.filter(x => x._1.equals("ip1")).map(x => (x._2, 1)).reduceByKey(_ + _).collect()
+    //    printLogCount(ip1)
+    //sampleLogProcess()
   }
 
   /**
