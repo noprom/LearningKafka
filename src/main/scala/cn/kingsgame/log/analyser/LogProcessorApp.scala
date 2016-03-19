@@ -8,7 +8,8 @@ import org.apache.spark.rdd.RDD
 
 /**
   * LogProcessor
-  * 为处理log日志建模
+  * 单机版处理log日志建模
+  * 直接打开idea运行即可
   *
   * Author: Noprom <tyee.noprom@qq.com>
   * Date: 16/3/11 下午10:24.
@@ -108,14 +109,21 @@ object LogProcessorApp {
       .map(x => (x.ip, 1))
       .reduceByKey(_ + _)
       .take(100)
-    println(s"""ipData -----> : ${ipData.mkString("[", ",", "]")}""")
+    //println(s"""ipData -----> : ${ipData.mkString("[", ",", "]")}""")
+    ipData.foreach(x => {
+      println(x._1 + "\t" + x._2)
+    })
 
     // 统计不同国家的用户量
     val countryData = accessLogs
       .map(x => (x.device.country, 1))
       .reduceByKey(_ + _)
       .take(100)
-    println(s"""countryData -----> : ${countryData.mkString("[", ",", "]")}""")
+    //println(s"""countryData -----> : ${countryData.mkString("[", ",", "]")}""")
+    // 打印到控制台
+    countryData.foreach(x => {
+      println(x._1 + "\t" + x._2)
+    })
 
     // 打印日志内容
     // printLogVals(newLogs)
