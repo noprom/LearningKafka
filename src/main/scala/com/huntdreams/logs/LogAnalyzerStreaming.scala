@@ -35,8 +35,10 @@ import org.apache.spark.streaming.{StreamingContext, Duration}
   * Date: 16/3/15 下午5:02.
   */
 object LogAnalyzerStreaming {
-  val WINDOW_LENGTH = new Duration(30 * 1000)
-  val SLIDE_INTERVAL = new Duration(10 * 1000)
+//  val WINDOW_LENGTH = new Duration(30 * 1000)
+//  val SLIDE_INTERVAL = new Duration(10 * 1000)
+  val WINDOW_LENGTH = new Duration(3 * 1000)
+  val SLIDE_INTERVAL = new Duration(1 * 1000)
 
   def main(args: Array[String]) {
     val sparkConf = new SparkConf()
@@ -57,7 +59,7 @@ object LogAnalyzerStreaming {
       } else {
         // Calculate statistics based on the content size.
         val contentSizes = accessLogs.map(log => log.contentSize).cache()
-        println("Content Size Avg: %s, Min: %s, Max: %s".format(
+        println("------------------->>> Content Size Avg: %s, Min: %s, Max: %s".format(
           contentSizes.reduce(_ + _) / contentSizes.count,
           contentSizes.min,
           contentSizes.max
@@ -68,7 +70,7 @@ object LogAnalyzerStreaming {
           .map(log => (log.responseCode, 1))
           .reduceByKey(_ + _)
           .take(100)
-        println( s"""Response code counts: ${responseCodeToCount.mkString("[", ",", "]")}""")
+        println(s"""------------------->>> Response code counts: ${responseCodeToCount.mkString("[", ",", "]")}""")
 
         // Any IPAddress that has accessed the server more than 10 times.
         val ipAddresses = accessLogs
@@ -77,14 +79,14 @@ object LogAnalyzerStreaming {
           .filter(_._2 > 10)
           .map(_._1)
           .take(100)
-        println( s"""IPAddresses > 10 times: ${ipAddresses.mkString("[", ",", "]")}""")
+        println( s"""------------------->>> IPAddresses > 10 times: ${ipAddresses.mkString("[", ",", "]")}""")
 
         // Top Endpoints.
         val topEndpoints = accessLogs
           .map(log => (log.endpoint, 1))
           .reduceByKey(_ + _)
           .top(10)(OrderingUtils.SecondValueOrdering)
-        println( s"""Top Endpoints: ${topEndpoints.mkString("[", ",", "]")}""")
+        println( s"""------------------->>> Top Endpoints: ${topEndpoints.mkString("[", ",", "]")}""")
       }
     })
 
