@@ -25,18 +25,18 @@ import org.apache.spark.{SparkConf, SparkContext}
   * target/scala-2.10/spark-logs-analyzer_2.10-1.0.jar
   *
   *
-   *./bin/spark-submit --class com.huntdreams.logs.LogAnalyzerStreaming \
-    *--master spark://nopromdeMacBook-Pro.local:7077 \
-    *--executor-memory 1G --total-executor-cores 2 \
-    *--packages "org.apache.spark:spark-streaming-kafka_2.10:1.6.0,redis.clients:jedis:2.8.0" \
-    */Users/noprom/Documents/Dev/Kafka/Pro/LearningKafka/out/artifacts/LogAnalyzerStreaming_jar/LogAnalyzerStreaming.jar
+  * ./bin/spark-submit --class com.huntdreams.logs.LogAnalyzerStreaming \
+  * --master spark://nopromdeMacBook-Pro.local:7077 \
+  * --executor-memory 1G --total-executor-cores 2 \
+  * --packages "org.apache.spark:spark-streaming-kafka_2.10:1.6.0,redis.clients:jedis:2.8.0" \
+  * Users/noprom/Documents/Dev/Kafka/Pro/LearningKafka/out/artifacts/LogAnalyzerStreaming_jar/LogAnalyzerStreaming.jar
 
   * Author: Noprom <tyee.noprom@qq.com>
   * Date: 16/3/15 下午5:02.
   */
 object LogAnalyzerStreaming {
-//  val WINDOW_LENGTH = new Duration(30 * 1000)
-//  val SLIDE_INTERVAL = new Duration(10 * 1000)
+  //  val WINDOW_LENGTH = new Duration(30 * 1000)
+  //  val SLIDE_INTERVAL = new Duration(10 * 1000)
   val WINDOW_LENGTH = new Duration(3 * 1000)
   val SLIDE_INTERVAL = new Duration(1 * 1000)
 

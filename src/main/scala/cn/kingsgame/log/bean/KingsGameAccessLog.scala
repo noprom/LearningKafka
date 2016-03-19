@@ -44,14 +44,42 @@ package cn.kingsgame.log.bean
   * @param group
   * @param channel
   */
-//case class Device(slient: Int, offerId: String, manuFacturer: String, resolution: String,
-//                  net: String, lang: String, unkownSource: String, id: String, androidId: String,
-//                  time: String, mc: String, mem: String, sdk: String, vcode: String, app: String,
-//                  os: String, apis: String, sNation: String, imei: String, zavj8p: String, cpu: String,
-//                  versionName: String, board: String, nation: String, operator: String,
-//                  product: String, deviceMD5: String, producer: String, brand: String,
-//                  imsi: String, uuid: String, group: String, channel: String)
+class Device(slient: Long, offerId: String, manuFacturer: String, resolution: String,
+             net: String, lang: String, unkownSource: String, id: String, androidId: String,
+             time: String, mc: String, mem: String, sdk: String, vcode: String, app: String,
+             os: String, apis: String, sNation: String, imei: String, zavj8p: String, cpu: String,
+             versionName: String, board: String, nation: String, operator: String,
+             product: String, deviceMD5: String, producer: String, brand: String,
+             imsi: String, uuid: String, group: String, channel: String)
+
+/**
+  * 请求里面第二个内容
+  *
+  * @param app
+  * @param imei
+  * @param mc
+  * @param model
+  * @param net
+  * @param api
+  * @param vcode
+  * @param channel
+  * @param deviceMd5
+  * @param uuid
+  * @param imsi
+  * @param uid
+  * @param resolution
+  * @param producer
+  * @param group
+  * @param androidId
+  */
+class Info(app: String, imei: String, mc: String, model: String, net: String, api: String, vcode: String,
+           channel: String, deviceMd5: String, uuid: String, imsi: String, uid: String,
+           resolution: String, producer: String, group: String, androidId: String)
 
 class KingsGameAccessLog {
+
+}
+
+object KingsGameAccessLog {
 
 }
