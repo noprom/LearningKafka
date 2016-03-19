@@ -2,6 +2,7 @@ package cn.kingsgame.analyser
 
 import java.util.regex.{Matcher, Pattern}
 
+import cn.kingsgame.log.bean.KingsGameAccessLogProcessor
 import org.apache.spark.{SparkContext, SparkConf}
 import org.apache.spark.rdd.RDD
 
@@ -99,12 +100,25 @@ object LogProcessorApp {
     val sc = new SparkContext(conf)
 
     // 开始处理Log日志
-    // val logProcessor = new LogProcessor()
-    val logs = sc.textFile(logFile)
-    val newLogs = logs.flatMap(line => transformLogData(line))
+    val logProcessor = new KingsGameAccessLogProcessor()
+    val accessLogs = sc.textFile(logFile).map(logProcessor.parseLogLine).cache()
+
+    // 统计ip数据
+    val ipData = accessLogs
+      .map(x => (x.ip, 1))
+      .reduceByKey(_ + _)
+      .take(100)
+    println(s"""ipData -----> : ${ipData.mkString("[", ",", "]")}""")
+
+    // 统计不同国家的用户量
+    val countryData = accessLogs
+      .map(x => (x.device.country, 1))
+      .reduceByKey(_ + _)
+      .take(100)
+    println(s"""countryData -----> : ${countryData.mkString("[", ",", "]")}""")
 
     // 打印日志内容
-    printLogVals(newLogs)
+    // printLogVals(newLogs)
 
     // 统计不同的ip1以及访问次数
     //    val ip1 = newLogs.filter(x => x._1.equals("ip1")).map(x => (x._2, 1)).reduceByKey(_ + _).collect()

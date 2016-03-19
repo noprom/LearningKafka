@@ -3,8 +3,6 @@ package cn.kingsgame.log.bean
 import java.util.regex.Pattern
 
 import org.apache.log4j.Logger
-import org.json.JSONObject
-
 import scala.collection.mutable.Map
 
 /**
@@ -60,6 +58,8 @@ class Device(slient: String, offerId: String, manuFacturer: String, resolution: 
              versionName: String, board: String, nation: String, operator: String,
              product: String, deviceMD5: String, producer: String, ears: String, brand: String,
              imsi: String, uuid: String, group: String, channel: String) {
+  var country = nation
+
   override def toString: String = {
     "slient: " + slient + "\n" + "offerId: " + offerId + "\n" + "manuFacturer: " + manuFacturer + "\n" +
       "resolution:" + resolution + "\n" + "net: " + net + "\n" + "lang: " + lang + "\n" +
@@ -105,7 +105,7 @@ class Info(app: String, imei: String, mc: String, model: String, net: String, ap
   }
 }
 
-class KingsGameAccessLog(ip: String, time: String, domain: String, method: String, request: String,
+case class KingsGameAccessLog(ip: String, time: String, domain: String, method: String, request: String,
                          protocol: String, status: String, size: String,
                          //device: String,
                          device: Device,
@@ -122,9 +122,9 @@ class KingsGameAccessLog(ip: String, time: String, domain: String, method: Strin
   }
 }
 
-class KingsGameAccessLogProcessor {
+class KingsGameAccessLogProcessor extends Serializable {
 
-  val logger = Logger.getLogger(this.getClass)
+  //val logger = Logger.getLogger(this.getClass)
 
   val LOG_ENTRY_PATTERN =
     """^(\S+) (\S+) (\S+) \[([\w:/]+\s[+\-]\d{4})\] "(\S+)" "(\S+) (\S+) (\S+)" "-" (\d{3}) (\d+) (.+) "(.+)" "(\S+)" "(\S+)" "(\S+)" "(\S+)" "(\S+)""""
@@ -203,13 +203,13 @@ class KingsGameAccessLogProcessor {
     new Device(slient = deviceMap.getOrElse("silent", "0"), offerId = deviceMap.getOrElse("offer_id", "0"),
       manuFacturer = deviceMap("manuFacturer"), resolution = deviceMap("resolution"),
       net = deviceMap("net"), lang = deviceMap("lang"), unkownSource = deviceMap("unkown_source"),
-      androidId = deviceMap("androidid"), time = deviceMap("time"), mc = deviceMap("mc"),
+      androidId = deviceMap("androidid"), time = deviceMap("time"), mc = deviceMap.getOrElse("mc", ""),
       mem = deviceMap("mem"), sdk = deviceMap("sdk"), vcode = deviceMap("vcode"),
-      app = deviceMap("app"), os = deviceMap("os"), apis = deviceMap("apis"), zavj8p = deviceMap.getOrElse("zavj8p", "0"),
+      app = deviceMap.getOrElse("app", ""), os = deviceMap("os"), apis = deviceMap("apis"), zavj8p = deviceMap.getOrElse("zavj8p", "0"),
       sNation = deviceMap("s_nation"), imei = deviceMap("imei"), cpu = deviceMap("cpu"),
       versionName = deviceMap("versionName"), board = deviceMap("board"), nation = deviceMap("nation"),
       operator = deviceMap("operator"), product = deviceMap("product"), deviceMD5 = deviceMap("device-md5"),
-      producer = deviceMap("producer"), ears = deviceMap("ears"), brand = deviceMap("brand"),
+      producer = deviceMap("producer"), ears = deviceMap.getOrElse("ears", "0"), brand = deviceMap("brand"),
       imsi = deviceMap("imsi"), uuid = deviceMap("uuid"), group = deviceMap("group"),
       channel = deviceMap("channel"))
   }
@@ -227,12 +227,14 @@ class KingsGameAccessLogProcessor {
     for (str <- lineArr) {
       //println(str)
       val subStr = str.split("=")
-      val key = subStr(0)
-      var value = subStr(1)
-      infoMap += (key -> value)
+      if (subStr.length >= 2) {
+        val key = subStr(0)
+        var value = subStr(1)
+        infoMap += (key -> value)
+      }
     }
     // 返回转化之后的结果
-    new Info(app = infoMap("app"), imei = infoMap("imei"), mc = infoMap("mc"), model = infoMap("model"), net = infoMap("net"),
+    new Info(app = infoMap("app"), imei = infoMap("imei"), mc = infoMap.getOrElse("mc", ""), model = infoMap("model"), net = infoMap("net"),
       api = infoMap("api"), vcode = infoMap("vcode"), channel = infoMap("channel"), deviceMd5 = infoMap("device_md5"),
       uuid = infoMap("uuid"), imsi = infoMap("imsi"), uid = infoMap("uid"), resolution = infoMap("resolution"),
       producer = infoMap("producer"), group = infoMap("group"), androidId = infoMap("androidid"))
