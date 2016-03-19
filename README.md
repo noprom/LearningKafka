@@ -1,11 +1,12 @@
 # 需求
 按时间，国家，地区，手机型号，分辨率，系统版本，产品编号统计用户量，行为量
 
-# Flume相关配置
+# Flume配置
 
 ## Flume 日志模拟
 ```
 java -jar LogGenerator.jar /Users/noprom/Documents/Dev/Spark/servers/node-1/appserver-2/logs/debug.log  /Users/noprom/Documents/Dev/Spark/servers/node-1/appserver-1/logs/debug.log
+# 或直接运行cn.kingsgame.log.util.LogGenerator
 ```
 
 ## 开启一个Flume agent

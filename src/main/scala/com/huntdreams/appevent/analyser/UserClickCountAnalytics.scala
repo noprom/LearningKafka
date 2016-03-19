@@ -113,5 +113,4 @@ object UserClickCountAnalytics {
     --executor-memory 1G --total-executor-cores 2 \
     --packages "org.apache.spark:spark-streaming-kafka_2.10:1.6.0,redis.clients:jedis:2.8.0" \
     /Users/noprom/Documents/Dev/Kafka/Pro/LearningKafka/out/artifacts/UserClickCountAnalytics_jar/UserClickCountAnalytics.jar
-
  */

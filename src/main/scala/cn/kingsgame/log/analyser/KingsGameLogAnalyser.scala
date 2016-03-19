@@ -2,6 +2,7 @@ package cn.kingsgame.analyser
 
 import cn.kingsgame.log.bean.{KingsGameAccessLog, KingsGameAccessLogProcessor}
 import kafka.serializer.StringDecoder
+import org.apache.log4j.Logger
 import org.apache.spark.SparkConf
 import org.apache.spark.rdd.RDD
 import org.apache.spark.streaming.dstream.DStream
@@ -13,10 +14,21 @@ import org.apache.spark.streaming.{Seconds, StreamingContext}
   * 金石日志分析
   * Kafka Topic: log-topic
   *
+  *
+  * # 提交spark job
+./bin/spark-submit --class cn.kingsgame.analyser.KingsGameLogAnalyser \
+    --master spark://nopromdeMacBook-Pro.local:7077 \
+    --executor-memory 1G --total-executor-cores 2 \
+    --packages "org.apache.spark:spark-streaming-kafka_2.10:1.6.0,redis.clients:jedis:2.8.0" \
+    Users/noprom/Documents/Dev/Kafka/Pro/LearningKafka/out/artifacts/KingsGameLogAnalyser_jar/KingsGameLogAnalyser.jar
+
   * Author: Noprom <tyee.noprom@qq.com>
   * Date: 16/3/11 下午9:22.
   */
-object LogAnalyser {
+object KingsGameLogAnalyser {
+
+  val logger = Logger.getLogger(getClass)
+  val baseSavePath = "/Users/noprom/Desktop" //暂时保存到桌面
 
   /**
     * 累加求和的transform
@@ -51,9 +63,9 @@ object LogAnalyser {
 
     // 处理log日志
     val logProcessor = new KingsGameAccessLogProcessor()
-    val accessLogsDStream = kafkaStream.flatMap(line => {
-      Some(line._2)
-    }).map(logProcessor.parseLogLine).cache()
+    val accessLogsDStream = kafkaStream
+      .flatMap(line => Some(line._2))
+      .map(logProcessor.parseLogLine).cache()
 
     // 处理流数据
     execTransform(accessLogsDStream, ssc)
@@ -79,13 +91,13 @@ object LogAnalyser {
     val cumulativeCountryDataCountDStream = countryData
       .updateStateByKey(computeRunningSum)
     cumulativeCountryDataCountDStream.foreachRDD(rdd => {
-      val responseCodeToCount = rdd.take(100)
+      // 保存到文件
+      rdd.saveAsTextFile(baseSavePath + "/countryData.txt")
       rdd.foreachPartition(partionOfRecords => {
         partionOfRecords.foreach(pair => {
           val country = pair._1
           val count = pair._2
-          println("" + country + "\t" + count)
-          // TODO 保存到文件
+          println("----->" + country + "\t" + count)
         })
       })
     })

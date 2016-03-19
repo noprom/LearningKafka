@@ -87,7 +87,8 @@ object LogProcessorApp {
   }
 
   def main(args: Array[String]) {
-    val logFile = bathPath + "20160209.log"
+    //val logFile = bathPath + "20160209.log"
+    val logFile = "/Users/noprom/Documents/Dev/Spark/servers/node-1/appserver-1/logs/log.log"
     val eventFile = bathPath + "20160301_13_hk12.event"
 
     // Spark 相关配置
@@ -109,7 +110,8 @@ object LogProcessorApp {
       .map(x => (x.ip, 1))
       .reduceByKey(_ + _)
       .take(100)
-    //println(s"""ipData -----> : ${ipData.mkString("[", ",", "]")}""")
+
+    println(s"""ipData -----> : ${ipData.mkString("[", ",", "]")}""")
     ipData.foreach(x => {
       println(x._1 + "\t" + x._2)
     })
@@ -119,7 +121,7 @@ object LogProcessorApp {
       .map(x => (x.device.country, 1))
       .reduceByKey(_ + _)
       .take(100)
-    //println(s"""countryData -----> : ${countryData.mkString("[", ",", "]")}""")
+    println(s"""countryData -----> : ${countryData.mkString("[", ",", "]")}""")
     // 打印到控制台
     countryData.foreach(x => {
       println(x._1 + "\t" + x._2)

@@ -57,7 +57,9 @@ class Device(slient: String, offerId: String, manuFacturer: String, resolution: 
              sNation: String, imei: String, zavj8p: String, cpu: String,
              versionName: String, board: String, nation: String, operator: String,
              product: String, deviceMD5: String, producer: String, ears: String, brand: String,
-             imsi: String, uuid: String, group: String, channel: String) {
+             imsi: String, uuid: String, group: String, channel: String)
+  extends Serializable
+{
   var country = nation
 
   override def toString: String = {
@@ -95,7 +97,9 @@ class Device(slient: String, offerId: String, manuFacturer: String, resolution: 
   */
 class Info(app: String, imei: String, mc: String, model: String, net: String, api: String, vcode: String,
            channel: String, deviceMd5: String, uuid: String, imsi: String, uid: String,
-           resolution: String, producer: String, group: String, androidId: String) {
+           resolution: String, producer: String, group: String, androidId: String)
+  extends Serializable
+{
   override def toString: String = {
     "app: " + app + "\n" + "imei: " + imei + "\n" + "mc: " + mc + "\n" +
       "model: " + model + "\n" + "net: " + net + "\n" + "api: " + api + "\n" +
