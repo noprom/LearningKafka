@@ -46,13 +46,13 @@ import com.sun.tools.corba.se.idl.StringGen
   * @param group
   * @param channel
   */
-case class Device(slient: Int, offerId: String, manuFacturer: String, resolution: String,
-                  net: String, lang: String, unkownSource: String, id: String, androidId: String,
-                  time: String, mc: String, mem: String, sdk: String, vcode: String, app: String,
-                  os: String, apis: String, sNation: String, imei: String, zavj8p: String, cpu: String,
-                  versionName: String, board: String, nation: String, operator: String,
-                  product: String, deviceMD5: String, producer: String, brand: String,
-                  imsi: String, uuid: String, group: String, channel: String)
+//case class Device(slient: Int, offerId: String, manuFacturer: String, resolution: String,
+//                  net: String, lang: String, unkownSource: String, id: String, androidId: String,
+//                  time: String, mc: String, mem: String, sdk: String, vcode: String, app: String,
+//                  os: String, apis: String, sNation: String, imei: String, zavj8p: String, cpu: String,
+//                  versionName: String, board: String, nation: String, operator: String,
+//                  product: String, deviceMD5: String, producer: String, brand: String,
+//                  imsi: String, uuid: String, group: String, channel: String)
 
 class KingsGameAccessLog {
 
